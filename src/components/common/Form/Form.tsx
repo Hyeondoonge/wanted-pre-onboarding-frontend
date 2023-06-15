@@ -1,5 +1,27 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import * as Styled from './Form.styled';
+
+interface EmailInputProps {
+  setIsValid: React.Dispatch<
+    React.SetStateAction<{
+      email: boolean;
+      password: boolean;
+    }>
+  >;
+}
+
+interface PasswordInputProps {
+  setIsValid: React.Dispatch<
+    React.SetStateAction<{
+      email: boolean;
+      password: boolean;
+    }>
+  >;
+}
+
+interface ButtonProps {
+  disabled: boolean;
+}
 
 function EmailInput() {
   const onInput = (event: FormEvent<HTMLInputElement>) => {
