@@ -19,8 +19,15 @@ interface PasswordInputProps {
   >;
 }
 
+type TAction = '로그인' | '회원가입';
+
 interface ButtonProps {
+  action: TAction;
   disabled: boolean;
+}
+
+interface FormProps {
+  action: TAction;
 }
 
 function EmailInput({ setIsValid }: EmailInputProps) {
@@ -47,15 +54,18 @@ function PasswordInput({ setIsValid }: PasswordInputProps) {
   return <Styled.PasswordInput data-testid='password-input' onInput={onInput} />;
 }
 
-function Button({ disabled }: ButtonProps) {
+function Button({ action, disabled }: ButtonProps) {
   return (
-    <Styled.SubmitButton data-testid='signup-button' disabled={disabled}>
-      제출
+    <Styled.SubmitButton
+      data-testid={action === '로그인' ? 'signin-button' : 'signup-button'}
+      disabled={disabled}
+    >
+      {action}
     </Styled.SubmitButton>
   );
 }
 
-export default function Form() {
+export default function Form({ action }: FormProps) {
   const [isValid, setIsValid] = useState({ email: false, password: false });
 
   return (
@@ -65,7 +75,7 @@ export default function Form() {
         <PasswordInput setIsValid={setIsValid} />
       </div>
       <div>
-        <Button disabled={!isValid.email || !isValid.password} />
+        <Button action={action} disabled={!isValid.email || !isValid.password} />
       </div>
     </Styled.Form>
   );
