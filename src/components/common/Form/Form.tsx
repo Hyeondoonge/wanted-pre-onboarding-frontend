@@ -1,11 +1,24 @@
+import { FormEvent } from 'react';
 import * as Styled from './Form.styled';
 
 function EmailInput() {
-  return <Styled.EmailInput data-testid='email-input' />;
+  const onInput = (event: FormEvent<HTMLInputElement>) => {
+    const { value } = event.target as HTMLInputElement;
+    const reg = new RegExp('@');
+    const res = reg.test(value);
+  };
+
+  return <Styled.EmailInput data-testid='email-input' onInput={onInput} />;
 }
 
 function PasswordInput() {
-  return <Styled.PasswordInput data-testid='password-input' />;
+  const onInput = (event: FormEvent<HTMLInputElement>) => {
+    const { value } = event.target as HTMLInputElement;
+    const reg = new RegExp('^.{8,}$');
+    const res = reg.test(value);
+  };
+
+  return <Styled.PasswordInput data-testid='password-input' onInput={onInput} />;
 }
 
 function Button() {
