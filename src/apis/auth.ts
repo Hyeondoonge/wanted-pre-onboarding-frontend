@@ -11,9 +11,8 @@ export async function signUp(signupBody: {
       body: JSON.stringify(signupBody)
     });
 
-    const result = await response.json();
-    if (response.ok) return result;
-    throw new Error((result as { message: string }).message);
+    if (response.ok) return signupBody;
+    throw new Error(((await response.json()) as { message: string }).message);
   } catch (error) {
     if (error instanceof Error) return { message: error.message };
     return { message: '알 수 없는 에러 입니다' };
