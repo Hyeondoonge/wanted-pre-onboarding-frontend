@@ -3,7 +3,7 @@ import * as Styled from './SignInPage.styled';
 import PasswordInput from 'components/common/PasswordInput/PasswordInput';
 import SubmitButton from 'components/common/SubmitButton/SubmitButton';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { signIn } from 'apis/auth';
 import { TODO_URL } from 'constants/route';
 
@@ -30,6 +30,10 @@ export default function SignInPage() {
       naviagte(TODO_URL);
     }
   };
+
+  if (localStorage.getItem('access_token')) {
+    return <Navigate replace to={TODO_URL} />;
+  }
 
   return (
     <Styled.SignInPage>

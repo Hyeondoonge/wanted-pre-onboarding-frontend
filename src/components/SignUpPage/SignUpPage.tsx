@@ -4,8 +4,8 @@ import EmailInput from 'components/common/EmailInput/EmailInput';
 import PasswordInput from 'components/common/PasswordInput/PasswordInput';
 import SubmitButton from 'components/common/SubmitButton/SubmitButton';
 import { signUp } from 'apis/auth';
-import { useNavigate } from 'react-router-dom';
-import { SIGNIN_URL } from 'constants/route';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { SIGNIN_URL, TODO_URL } from 'constants/route';
 
 interface AuthFormEventTarget extends EventTarget {
   email: HTMLInputElement;
@@ -29,6 +29,10 @@ export default function SignUpPage() {
       naviagte(SIGNIN_URL);
     }
   };
+
+  if (localStorage.getItem('access_token')) {
+    return <Navigate replace to={TODO_URL} />;
+  }
 
   return (
     <Styled.SignUpPage>
