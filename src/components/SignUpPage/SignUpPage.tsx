@@ -1,17 +1,23 @@
-import Form from 'components/common/Form';
 import * as Styled from './SignUpPage.styled';
-import { useNavigate } from 'react-router';
-import { SIGNIN_URL } from 'constants/route';
+import { useState } from 'react';
+import EmailInput from 'components/common/EmailInput/EmailInput';
+import PasswordInput from 'components/common/PasswordInput/PasswordInput';
+import SubmitButton from 'components/common/SubmitButton/SubmitButton';
 
 export default function SignUpPage() {
-  const navigate = useNavigate();
-  const submitHandler = () => {
-    navigate(SIGNIN_URL);
-  };
+  const [isValid, setIsValid] = useState({ email: false, password: false });
 
   return (
     <Styled.SignUpPage>
-      <Form action={'회원가입'} submitHandler={submitHandler} />
+      <Styled.Form>
+        <div>
+          <EmailInput setIsValid={setIsValid} />
+          <PasswordInput setIsValid={setIsValid} />
+        </div>
+        <div>
+          <SubmitButton disabled={!isValid.email || !isValid.password}>회원가입</SubmitButton>
+        </div>
+      </Styled.Form>
     </Styled.SignUpPage>
   );
 }
