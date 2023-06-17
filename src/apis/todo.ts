@@ -23,8 +23,9 @@ async function createTodo({
       },
       body: JSON.stringify(todo)
     });
-    if (response.ok) return response.json() as Promise<Todo>;
-    throw new Error(((await response.json()) as Error).message);
+    const json = response.json();
+    if (response.ok) return json as Promise<Todo>;
+    throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message };
@@ -47,8 +48,9 @@ async function getTodos({
         'Content-Type': 'application/json'
       }
     });
-    if (response.ok) return response.json() as Promise<Todo[]>;
-    throw new Error(((await response.json()) as Error).message);
+    const json = response.json();
+    if (response.ok) return json as Promise<Todo[]>;
+    throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message };
@@ -77,8 +79,9 @@ async function updateTodo({
       body: JSON.stringify(updateTodoBody)
     });
 
-    if (response.ok) return response.json() as Promise<Todo>;
-    throw new Error(((await response.json()) as Error).message);
+    const json = response.json();
+    if (response.ok) return json as Promise<Todo>;
+    throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message };
@@ -102,8 +105,9 @@ async function deleteTodo({
         Authorization: `Bearer ${access_token}`
       }
     });
+    const json = response.json();
     if (response.ok) return; // return nothing
-    throw new Error(((await response.json()) as Error).message);
+    throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
       return { message: error.message };
