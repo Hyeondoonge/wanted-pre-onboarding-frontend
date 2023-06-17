@@ -60,7 +60,7 @@ async function updateTodo({
   updateTodoBody
 }: {
   access_token: string;
-  id: string;
+  id: number;
   updateTodoBody: { todo: string; isCompleted: boolean };
 }): Promise<Todo | { message: string }> {
   try {
