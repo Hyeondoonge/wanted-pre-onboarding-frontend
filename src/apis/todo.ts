@@ -1,11 +1,5 @@
 import { TODO_URL } from 'constants/api';
-
-interface Todo {
-  id: number;
-  todo: string;
-  isCompleted: boolean;
-  userId: number;
-}
+import { Todo } from 'interface/common';
 
 async function createTodo({
   access_token,

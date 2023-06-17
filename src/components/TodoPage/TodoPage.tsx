@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Styled from './TodoPage.styled';
 import { getTodos } from 'apis/todo';
+import { Todo } from 'interface/common';
 
 function TodoItem({ todo }: { todo: Todo }) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
@@ -29,13 +30,6 @@ function TodoItem({ todo }: { todo: Todo }) {
       </button>
     </li>
   );
-}
-
-interface Todo {
-  id: number;
-  todo: string;
-  isCompleted: boolean;
-  userId: number;
 }
 
 export default function TodoPage() {
