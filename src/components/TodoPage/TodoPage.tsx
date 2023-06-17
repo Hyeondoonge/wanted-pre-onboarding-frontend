@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Styled from './TodoPage.styled';
+import { getTodos } from 'apis/todo';
 
-function TodoItem() {
+function TodoItem({ todo }: { todo: Todo }) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
+  const { id, todo: name, isCompleted, userId } = todo;
 
   return !isUpdatemode ? (
     <li>
       <label>
-        <input type='checkbox' />
-        <span>TODO</span>
+        <input type='checkbox' checked={isCompleted} />
+        <span>{name}</span>
       </label>
       <button data-testid='modify-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
         수정
@@ -19,7 +21,7 @@ function TodoItem() {
     <li>
       <label>
         <input type='checkbox' />
-        <input data-testid='modify-input' />
+        <input data-testid='modify-input' defaultValue={name} />
       </label>
       <button data-testid='submit-button'>제출</button>
       <button data-testid='cancel-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
@@ -29,18 +31,40 @@ function TodoItem() {
   );
 }
 
+interface Todo {
+  id: number;
+  todo: string;
+  isCompleted: boolean;
+  userId: number;
+}
+
 export default function TodoPage() {
+  const [todolist, setTodoList] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    async function fetchTodo() {
+      const access_token = localStorage.getItem('access_token') || '';
+      const result = await getTodos({ access_token });
+
+      if ('message' in result) {
+        console.log(result);
+      } else {
+        setTodoList(result);
+      }
+    }
+
+    fetchTodo();
+  }, []);
+
   return (
     <Styled.TodoPage>
       <Styled.Form>
         <input data-testid='new-todo-input' />
         <button data-testid='new-todo-add-button'>추가</button>
       </Styled.Form>
-      {Array(5)
-        .fill(null)
-        .map((_, index) => (
-          <TodoItem key={index} />
-        ))}
+      {todolist.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
     </Styled.TodoPage>
   );
 }
