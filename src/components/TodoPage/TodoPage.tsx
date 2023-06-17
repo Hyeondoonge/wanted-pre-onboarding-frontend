@@ -11,10 +11,12 @@ interface TodoFormEventTarget extends EventTarget {
 
 function TodoItem({
   item,
-  updateTodo
+  updateTodo,
+  deleteTodo
 }: {
   item: Todo;
   updateTodo: (id: number, data: UpdateTodo, callback?: () => void) => void;
+  deleteTodo: (id: number) => void;
 }) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
   const { id, todo, isCompleted, userId } = item;
@@ -46,7 +48,9 @@ function TodoItem({
       <button data-testid='modify-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
         수정
       </button>
-      <button data-testid='delete-button'>삭제</button>
+      <button data-testid='delete-button' onClick={() => deleteTodo(id)}>
+        삭제
+      </button>
     </li>
   ) : (
     <li>
@@ -123,6 +127,17 @@ export default function TodoPage() {
     }
   };
 
+  const deleteTodo = (targetId: number) => {
+    const access_token = localStorage.getItem('access_token') || '';
+    const result = Api.deleteTodo({ access_token, id: targetId });
+
+    if ('message' in result) {
+      console.log(result);
+    } else {
+      setTodoList(todolist.filter(({ id }) => id !== targetId));
+    }
+  };
+
   return (
     <Styled.TodoPage>
       <Styled.Form onSubmit={handleAddTodo}>
@@ -132,7 +147,7 @@ export default function TodoPage() {
         </button>
       </Styled.Form>
       {todolist.map((todo) => (
-        <TodoItem key={todo.id} item={todo} updateTodo={updateTodo} />
+        <TodoItem key={todo.id} item={todo} updateTodo={updateTodo} deleteTodo={deleteTodo} />
       ))}
     </Styled.TodoPage>
   );
