@@ -90,7 +90,7 @@ async function deleteTodo({
   id
 }: {
   access_token: string;
-  id: string;
+  id: number;
 }): Promise<undefined | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
@@ -99,8 +99,8 @@ async function deleteTodo({
         Authorization: `Bearer ${access_token}`
       }
     });
-    const json = response.json();
     if (response.ok) return; // return nothing
+    const json = response.json();
     throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
