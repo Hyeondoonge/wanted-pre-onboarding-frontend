@@ -1,17 +1,32 @@
 import { FormEvent, useEffect, useState } from 'react';
 import * as Styled from './TodoPage.styled';
-import { createTodo, getTodos } from 'apis/todo';
+import * as Api from 'apis/todo';
 import { Todo } from 'interface/common';
 
-function TodoItem({ todo }: { todo: Todo }) {
+type UpdateTodo = Pick<Todo, 'todo' | 'isCompleted'>;
+
+function TodoItem({
+  item,
+  updateTodo
+}: {
+  item: Todo;
+  updateTodo: (id: number, data: UpdateTodo) => void;
+}) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
-  const { id, todo: name, isCompleted, userId } = todo;
+  const { id, todo, isCompleted, userId } = item;
+
+  const handleCheck = async (event: FormEvent<HTMLInputElement>) => {
+    if ('checked' in event.target) {
+      const checked = event.target.checked as boolean;
+      updateTodo(id, { todo, isCompleted: checked });
+    }
+  };
 
   return !isUpdatemode ? (
     <li>
       <label>
-        <input type='checkbox' checked={isCompleted} />
-        <span>{name}</span>
+        <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
+        <span>{todo}</span>
       </label>
       <button data-testid='modify-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
         수정
@@ -22,7 +37,7 @@ function TodoItem({ todo }: { todo: Todo }) {
     <li>
       <label>
         <input type='checkbox' />
-        <input data-testid='modify-input' defaultValue={name} />
+        <input data-testid='modify-input' defaultValue={todo} />
       </label>
       <button data-testid='submit-button'>제출</button>
       <button data-testid='cancel-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
@@ -42,7 +57,7 @@ export default function TodoPage() {
   useEffect(() => {
     async function fetchTodo() {
       const access_token = localStorage.getItem('access_token') || '';
-      const result = await getTodos({ access_token });
+      const result = await Api.getTodos({ access_token });
 
       if ('message' in result) {
         console.log(result);
@@ -61,12 +76,34 @@ export default function TodoPage() {
     const $input = event.target as TodoFormEventTarget;
     const todo = $input.todo.value;
 
-    const result = await createTodo({ access_token, createTodoBody: { todo } });
+    const result = await Api.createTodo({ access_token, createTodoBody: { todo } });
 
     if ('message' in result) {
       console.log(result);
     } else {
       setTodoList((todo) => [...todo, result]);
+    }
+  };
+
+  const updateTodo = (targetId: number, data: UpdateTodo) => {
+    const { todo, isCompleted } = data;
+    const newTodolist = todolist.map((todo) => ({ ...todo }));
+
+    const access_token = localStorage.getItem('access_token') || '';
+    const result = Api.updateTodo({ access_token, id: targetId, updateTodoBody: data });
+
+    if ('message' in result) {
+      console.log(result);
+    } else {
+      // 성공시
+      for (let i = 0; i < newTodolist.length; i++) {
+        const { id } = newTodolist[i];
+        if (targetId === id) {
+          newTodolist[i] = { ...newTodolist[i], todo, isCompleted };
+          break;
+        }
+      }
+      setTodoList(newTodolist);
     }
   };
 
@@ -79,7 +116,7 @@ export default function TodoPage() {
         </button>
       </Styled.Form>
       {todolist.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} />
+        <TodoItem key={todo.id} item={todo} updateTodo={updateTodo} />
       ))}
     </Styled.TodoPage>
   );
