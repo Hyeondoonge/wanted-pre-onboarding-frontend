@@ -99,7 +99,7 @@ async function deleteTodo({
         Authorization: `Bearer ${access_token}`
       }
     });
-    if (response.ok) return; // return nothing
+    if (response.ok) return;
     const json = response.json();
     throw new Error(((await json) as Error).message);
   } catch (error) {
