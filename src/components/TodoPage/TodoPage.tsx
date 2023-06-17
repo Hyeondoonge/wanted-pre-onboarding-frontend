@@ -5,12 +5,16 @@ import { Todo } from 'interface/common';
 
 type UpdateTodo = Pick<Todo, 'todo' | 'isCompleted'>;
 
+interface TodoFormEventTarget extends EventTarget {
+  todo: HTMLInputElement;
+}
+
 function TodoItem({
   item,
   updateTodo
 }: {
   item: Todo;
-  updateTodo: (id: number, data: UpdateTodo) => void;
+  updateTodo: (id: number, data: UpdateTodo, callback?: () => void) => void;
 }) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
   const { id, todo, isCompleted, userId } = item;
@@ -20,6 +24,17 @@ function TodoItem({
       const checked = event.target.checked as boolean;
       updateTodo(id, { todo, isCompleted: checked });
     }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const $input = event.target as TodoFormEventTarget;
+    const todo = $input.todo.value;
+
+    updateTodo(id, { todo, isCompleted }, () => {
+      setIsUpdatemode(!isUpdatemode);
+    });
   };
 
   return !isUpdatemode ? (
@@ -35,20 +50,20 @@ function TodoItem({
     </li>
   ) : (
     <li>
-      <label>
-        <input type='checkbox' />
-        <input data-testid='modify-input' defaultValue={todo} />
-      </label>
-      <button data-testid='submit-button'>제출</button>
-      <button data-testid='cancel-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
-        취소
-      </button>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
+          <input data-testid='modify-input' name='todo' defaultValue={todo} />
+        </label>
+        <button data-testid='submit-button' type='submit'>
+          제출
+        </button>
+        <button data-testid='cancel-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
+          취소
+        </button>
+      </form>
     </li>
   );
-}
-
-interface TodoFormEventTarget extends EventTarget {
-  todo: HTMLInputElement;
 }
 
 export default function TodoPage() {
@@ -85,7 +100,7 @@ export default function TodoPage() {
     }
   };
 
-  const updateTodo = (targetId: number, data: UpdateTodo) => {
+  const updateTodo = (targetId: number, data: UpdateTodo, callback?: () => void) => {
     const { todo, isCompleted } = data;
     const newTodolist = todolist.map((todo) => ({ ...todo }));
 
@@ -104,6 +119,7 @@ export default function TodoPage() {
         }
       }
       setTodoList(newTodolist);
+      if (callback) callback();
     }
   };
 
