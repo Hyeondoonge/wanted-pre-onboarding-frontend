@@ -43,7 +43,9 @@ export default function SignInPage() {
           <PasswordInput setIsValid={setIsValid} />
         </div>
         <div>
-          <SubmitButton disabled={!isValid.email || !isValid.password}>로그인</SubmitButton>
+          <SubmitButton disabled={!isValid.email || !isValid.password} testId='signin-button'>
+            로그인
+          </SubmitButton>
         </div>
       </Styled.Form>
     </Styled.SignInPage>

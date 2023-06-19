@@ -42,7 +42,9 @@ export default function SignUpPage() {
           <PasswordInput setIsValid={setIsValid} />
         </div>
         <div>
-          <SubmitButton disabled={!isValid.email || !isValid.password}>회원가입</SubmitButton>
+          <SubmitButton disabled={!isValid.email || !isValid.password} testId='signup-button'>
+            회원가입
+          </SubmitButton>
         </div>
       </Styled.Form>
     </Styled.SignUpPage>
