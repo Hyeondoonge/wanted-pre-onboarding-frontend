@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useState } from 'react';
 import * as Styled from './TodoPage.styled';
 import * as Api from 'apis/todo';
 import { Todo } from 'interface/common';
+import { Navigate } from 'react-router-dom';
+import { SIGNIN_URL } from 'constants/route';
 
 type UpdateTodo = Pick<Todo, 'todo' | 'isCompleted'>;
 
@@ -137,6 +139,9 @@ export default function TodoPage() {
       setTodoList(todolist.filter(({ id }) => id !== targetId));
     }
   };
+
+  const access_token = localStorage.getItem('access_token') || '';
+  if (!access_token) return <Navigate to={SIGNIN_URL} />;
 
   return (
     <Styled.TodoPage>
