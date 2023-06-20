@@ -9,3 +9,5 @@ export interface IUser {
   email: string;
   password: string;
 }
+
+export type Response<T> = Promise<T | { message: string }>;

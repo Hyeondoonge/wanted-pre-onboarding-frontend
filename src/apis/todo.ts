@@ -1,5 +1,5 @@
 import { TODO_URL } from 'constants/api';
-import { ITodo } from 'interface/common';
+import { ITodo, Response } from 'interface/common';
 
 async function createTodo({
   access_token,
@@ -7,7 +7,7 @@ async function createTodo({
 }: {
   access_token: string;
   createTodoBody: { todo: string };
-}): Promise<ITodo | { message: string }> {
+}): Response<ITodo> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
       method: 'post',
@@ -29,11 +29,7 @@ async function createTodo({
   }
 }
 
-async function getTodos({
-  access_token
-}: {
-  access_token: string;
-}): Promise<ITodo[] | { message: string }> {
+async function getTodos({ access_token }: { access_token: string }): Response<ITodo[]> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
       method: 'get',
@@ -62,7 +58,7 @@ async function updateTodo({
   access_token: string;
   id: number;
   updateTodoBody: { todo: string; isCompleted: boolean };
-}): Promise<ITodo | { message: string }> {
+}): Response<ITodo> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
       method: 'put',
@@ -91,7 +87,7 @@ async function deleteTodo({
 }: {
   access_token: string;
   id: number;
-}): Promise<undefined | { message: string }> {
+}): Response<undefined> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
       method: 'delete',
