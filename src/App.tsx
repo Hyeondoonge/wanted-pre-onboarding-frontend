@@ -5,10 +5,13 @@ import TodoPage from 'components/TodoPage';
 import { HOME_URL, SIGNIN_URL, SIGNUP_URL, TODO_URL } from 'constants/route';
 import HomePage from 'components/HomePage';
 import styled from 'styled-components';
+import NotFoundPage from 'components/NotFoundPage';
 
 const StyledApp = styled.div`
+  box-sizing: border-box;
   width: 500px;
   height: 500px;
+  padding: 100px;
 
   position: fixed;
   top: calc(50vh - 250px);
@@ -30,6 +33,7 @@ export default function App() {
           <Route path={SIGNUP_URL} element={<SignUpPage />} />
           <Route path={SIGNIN_URL} element={<SignInPage />} />
           <Route path={TODO_URL} element={<TodoPage />} />
+          <Route path={'*'} element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </StyledApp>
