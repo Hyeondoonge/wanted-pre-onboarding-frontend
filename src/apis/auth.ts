@@ -1,9 +1,9 @@
 import { SIGNIN_URL, SIGNUP_URL } from 'constants/api';
+import { IUser } from 'interface/common';
 
-export async function signUp(signupBody: {
-  email: string;
-  password: string;
-}): Promise<{ email: string; password: string } | { message: string }> {
+type SignupBody = IUser;
+
+export async function signUp(signupBody: SignupBody): Promise<IUser | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}${SIGNUP_URL}`, {
       method: 'post',
@@ -19,10 +19,11 @@ export async function signUp(signupBody: {
   }
 }
 
-export async function signIn(signinBody: {
-  email: string;
-  password: string;
-}): Promise<{ access_token: string } | { message: string }> {
+type SigninBody = IUser;
+
+export async function signIn(
+  signinBody: SigninBody
+): Promise<{ access_token: string } | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}${SIGNIN_URL}`, {
       method: 'post',

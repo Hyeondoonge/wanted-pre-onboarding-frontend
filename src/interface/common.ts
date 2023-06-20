@@ -4,3 +4,8 @@ export interface Todo {
   isCompleted: boolean;
   userId: number;
 }
+
+export interface IUser {
+  email: string;
+  password: string;
+}
