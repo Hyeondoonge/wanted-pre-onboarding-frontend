@@ -5,7 +5,8 @@ import SubmitButton from 'components/common/SubmitButton/SubmitButton';
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { signIn } from 'apis/auth';
-import { TODO_URL } from 'constants/route';
+import { SIGNUP_URL, TODO_URL } from 'constants/route';
+import Link from 'components/common/Link';
 
 interface AuthFormEventTarget extends EventTarget {
   email: HTMLInputElement;
@@ -47,6 +48,9 @@ export default function SignInPage() {
             로그인
           </SubmitButton>
         </div>
+        <Link to={SIGNUP_URL} underline>
+          가입된 계정이 없으신가요?
+        </Link>
       </Styled.Form>
     </Styled.SignInPage>
   );

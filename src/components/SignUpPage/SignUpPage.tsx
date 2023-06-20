@@ -6,6 +6,7 @@ import SubmitButton from 'components/common/SubmitButton/SubmitButton';
 import { signUp } from 'apis/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { SIGNIN_URL, TODO_URL } from 'constants/route';
+import Link from 'components/common/Link';
 
 interface AuthFormEventTarget extends EventTarget {
   email: HTMLInputElement;
@@ -46,6 +47,9 @@ export default function SignUpPage() {
             회원가입
           </SubmitButton>
         </div>
+        <Link to={SIGNIN_URL} underline>
+          가입된 계정이 있으신가요?
+        </Link>
       </Styled.Form>
     </Styled.SignUpPage>
   );
