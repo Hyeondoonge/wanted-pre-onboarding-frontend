@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
 import * as Styled from './TodoPage.styled';
 import * as Api from 'apis/todo';
-import { Todo } from 'interface/common';
+import { ITodo } from 'interface/common';
 import { Navigate } from 'react-router-dom';
 import { SIGNIN_URL } from 'constants/route';
 
-type UpdateTodo = Pick<Todo, 'todo' | 'isCompleted'>;
+type UpdateTodo = Pick<ITodo, 'todo' | 'isCompleted'>;
 
 interface TodoFormEventTarget extends EventTarget {
   todo: HTMLInputElement;
@@ -16,7 +16,7 @@ function TodoItem({
   updateTodo,
   deleteTodo
 }: {
-  item: Todo;
+  item: ITodo;
   updateTodo: (id: number, data: UpdateTodo, callback?: () => void) => void;
   deleteTodo: (id: number) => void;
 }) {
@@ -73,7 +73,7 @@ function TodoItem({
 }
 
 export default function TodoPage() {
-  const [todolist, setTodoList] = useState<Todo[]>([]);
+  const [todolist, setTodoList] = useState<ITodo[]>([]);
 
   useEffect(() => {
     async function fetchTodo() {
