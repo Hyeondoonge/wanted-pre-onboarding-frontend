@@ -1,5 +1,6 @@
 import { TODO_URL } from 'constants/api';
 import { ITodo, Response } from 'interface/common';
+import { request } from 'utils/api';
 
 async function createTodo({
   access_token,
@@ -8,46 +9,25 @@ async function createTodo({
   access_token: string;
   createTodoBody: { todo: string };
 }): Response<ITodo> {
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
-      method: 'post',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(createTodoBody)
-    });
-    const json = response.json();
-    if (response.ok) return json as Promise<ITodo>;
-    throw new Error(((await json) as Error).message);
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    } else {
-      return { message: '알 수 없는 에러입니다.' };
-    }
-  }
+  return request({
+    method: 'post',
+    path: TODO_URL,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(createTodoBody)
+  });
 }
 
 async function getTodos({ access_token }: { access_token: string }): Response<ITodo[]> {
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
-      method: 'get',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    const json = response.json();
-    if (response.ok) return json as Promise<ITodo[]>;
-    throw new Error(((await json) as Error).message);
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    } else {
-      return { message: '알 수 없는 에러입니다.' };
+  return request({
+    path: TODO_URL,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      'Content-Type': 'application/json'
     }
-  }
+  });
 }
 
 async function updateTodo({
@@ -59,26 +39,16 @@ async function updateTodo({
   id: number;
   updateTodoBody: { todo: string; isCompleted: boolean };
 }): Response<ITodo> {
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
-      method: 'put',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updateTodoBody)
-    });
-
-    const json = response.json();
-    if (response.ok) return json as Promise<ITodo>;
-    throw new Error(((await json) as Error).message);
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    } else {
-      return { message: '알 수 없는 에러입니다.' };
-    }
-  }
+  return request({
+    method: 'put',
+    path: TODO_URL,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      'Content-Type': 'application/json'
+    },
+    pathVariable: id,
+    body: JSON.stringify(updateTodoBody)
+  });
 }
 
 async function deleteTodo({
@@ -88,23 +58,14 @@ async function deleteTodo({
   access_token: string;
   id: number;
 }): Response<undefined> {
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
-      method: 'delete',
-      headers: {
-        Authorization: `Bearer ${access_token}`
-      }
-    });
-    if (response.ok) return;
-    const json = response.json();
-    throw new Error(((await json) as Error).message);
-  } catch (error) {
-    if (error instanceof Error) {
-      return { message: error.message };
-    } else {
-      return { message: '알 수 없는 에러입니다.' };
+  return request({
+    path: TODO_URL,
+    pathVariable: id,
+    method: 'delete',
+    headers: {
+      Authorization: `Bearer ${access_token}`
     }
-  }
+  });
 }
 
 export { createTodo, getTodos, updateTodo, deleteTodo };
