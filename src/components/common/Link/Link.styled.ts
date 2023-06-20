@@ -3,16 +3,11 @@ import styled from 'styled-components';
 
 export const Link = styled(ReactRouterDom.Link)`
   width: 150px;
-  font-size: 20px;
   text-align: center;
   text-decoration: none;
   padding: 10px;
   border-radius: 3px;
-  color: white;
-  background-color: #5867dc;
+  color: black;
   cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    filter: brightness(90%);
-  }
+  border: 1px solid #cbcbcb;
 `;
