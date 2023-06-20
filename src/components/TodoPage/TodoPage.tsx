@@ -42,7 +42,7 @@ function TodoItem({
   };
 
   return !isUpdatemode ? (
-    <li>
+    <Styled.TodoItem>
       <label>
         <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
         <span>{todo}</span>
@@ -53,9 +53,9 @@ function TodoItem({
       <button data-testid='delete-button' onClick={() => deleteTodo(id)}>
         삭제
       </button>
-    </li>
+    </Styled.TodoItem>
   ) : (
-    <li>
+    <Styled.TodoItem>
       <form onSubmit={handleSubmit}>
         <label>
           <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
@@ -68,7 +68,7 @@ function TodoItem({
           취소
         </button>
       </form>
-    </li>
+    </Styled.TodoItem>
   );
 }
 
