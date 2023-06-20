@@ -11,7 +11,7 @@ export default function Link({
   underline?: boolean;
 }) {
   return (
-    <Styled.Link to={to} underline={underline}>
+    <Styled.Link to={to} $underline={underline}>
       {children}
     </Styled.Link>
   );
