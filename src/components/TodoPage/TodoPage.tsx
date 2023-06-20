@@ -103,6 +103,7 @@ export default function TodoPage() {
       console.log(result);
     } else {
       setTodoList((todo) => [...todo, result]);
+      $input.todo.value = '';
     }
   };
 
