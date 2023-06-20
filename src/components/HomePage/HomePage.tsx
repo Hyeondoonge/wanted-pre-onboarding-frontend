@@ -11,8 +11,12 @@ export default function HomePage() {
 
   return (
     <Styled.HomePage>
-      <Link to={SIGNIN_URL}>로그인 하기</Link>
-      <Link to={SIGNUP_URL}>회원가입 하기</Link>
+      <Link to={SIGNIN_URL} underline>
+        로그인 하기
+      </Link>
+      <Link to={SIGNUP_URL} underline>
+        회원가입 하기
+      </Link>
     </Styled.HomePage>
   );
 }
