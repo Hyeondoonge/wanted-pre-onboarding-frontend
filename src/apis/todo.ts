@@ -1,5 +1,5 @@
 import { TODO_URL } from 'constants/api';
-import { Todo } from 'interface/common';
+import { ITodo } from 'interface/common';
 
 async function createTodo({
   access_token,
@@ -7,7 +7,7 @@ async function createTodo({
 }: {
   access_token: string;
   createTodoBody: { todo: string };
-}): Promise<Todo | { message: string }> {
+}): Promise<ITodo | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
       method: 'post',
@@ -18,7 +18,7 @@ async function createTodo({
       body: JSON.stringify(createTodoBody)
     });
     const json = response.json();
-    if (response.ok) return json as Promise<Todo>;
+    if (response.ok) return json as Promise<ITodo>;
     throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
@@ -33,7 +33,7 @@ async function getTodos({
   access_token
 }: {
   access_token: string;
-}): Promise<Todo[] | { message: string }> {
+}): Promise<ITodo[] | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}`, {
       method: 'get',
@@ -43,7 +43,7 @@ async function getTodos({
       }
     });
     const json = response.json();
-    if (response.ok) return json as Promise<Todo[]>;
+    if (response.ok) return json as Promise<ITodo[]>;
     throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
@@ -62,7 +62,7 @@ async function updateTodo({
   access_token: string;
   id: number;
   updateTodoBody: { todo: string; isCompleted: boolean };
-}): Promise<Todo | { message: string }> {
+}): Promise<ITodo | { message: string }> {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_END_POINT}/${TODO_URL}/${id}`, {
       method: 'put',
@@ -74,7 +74,7 @@ async function updateTodo({
     });
 
     const json = response.json();
-    if (response.ok) return json as Promise<Todo>;
+    if (response.ok) return json as Promise<ITodo>;
     throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
