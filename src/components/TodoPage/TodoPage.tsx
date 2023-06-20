@@ -147,14 +147,16 @@ export default function TodoPage() {
   return (
     <Styled.TodoPage>
       <Styled.Form onSubmit={handleAddTodo}>
-        <input data-testid='new-todo-input' name='todo' />
+        <input data-testid='new-todo-input' name='todo' autoComplete='off' />
         <button data-testid='new-todo-add-button' type='submit'>
           추가
         </button>
       </Styled.Form>
-      {todolist.map((todo) => (
-        <TodoItem key={todo.id} item={todo} updateTodo={updateTodo} deleteTodo={deleteTodo} />
-      ))}
+      <Styled.TodoList>
+        {todolist.map((todo) => (
+          <TodoItem key={todo.id} item={todo} updateTodo={updateTodo} deleteTodo={deleteTodo} />
+        ))}
+      </Styled.TodoList>
     </Styled.TodoPage>
   );
 }
