@@ -43,6 +43,9 @@ export async function request({
     throw new Error(((await json) as Error).message);
   } catch (error) {
     if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return { message: '이메일 또는 비밀번호가 틀렸습니다.' };
+      }
       return { message: error.message };
     } else {
       return { message: '알 수 없는 에러입니다.' };
