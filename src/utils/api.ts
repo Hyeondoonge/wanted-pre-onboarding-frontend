@@ -31,7 +31,7 @@ export async function request({
       init
     );
 
-    if (path === SIGNUP_URL || method === 'delete') {
+    if (response.ok && (path === SIGNUP_URL || method === 'delete')) {
       return {};
     }
 
