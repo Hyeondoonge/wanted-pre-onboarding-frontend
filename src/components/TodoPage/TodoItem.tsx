@@ -81,10 +81,20 @@ export default function TodoItem({
               <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
               <span>{todo}</span>
             </label>
-            <button data-testid='modify-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
+            <button
+              key='modify-button'
+              data-testid='modify-button'
+              onClick={() => setIsUpdatemode(!isUpdatemode)}
+              type='button'
+            >
               수정
             </button>
-            <button data-testid='delete-button' onClick={() => deleteTodo(id)}>
+            <button
+              key='delete-button'
+              data-testid='delete-button'
+              onClick={() => deleteTodo(id)}
+              type='button'
+            >
               삭제
             </button>
           </>
@@ -94,10 +104,15 @@ export default function TodoItem({
               <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
               <input data-testid='modify-input' name='todo' defaultValue={todo} />
             </label>
-            <button data-testid='submit-button' type='submit'>
+            <button key='delete-button' data-testid='submit-button'>
               제출
             </button>
-            <button data-testid='cancel-button' onClick={() => setIsUpdatemode(!isUpdatemode)}>
+            <button
+              key='cancel-button'
+              data-testid='cancel-button'
+              onClick={() => setIsUpdatemode(!isUpdatemode)}
+              type='button'
+            >
               취소
             </button>
           </>
