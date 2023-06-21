@@ -6,7 +6,7 @@ import EmailInput from 'components/common/EmailInput';
 import PasswordInput from 'components/common/PasswordInput';
 import SubmitButton from 'components/common/SubmitButton';
 import { SIGNIN_URL } from 'constants/route';
-
+import Toast from 'components/common/Toast';
 interface AuthFormEventTarget extends EventTarget {
   email: HTMLInputElement;
   password: HTMLInputElement;
@@ -15,6 +15,7 @@ interface AuthFormEventTarget extends EventTarget {
 export default function SignUpForm() {
   const [isValid, setIsValid] = useState({ email: false, password: false });
   const naviagte = useNavigate();
+  const [toast, setToast] = useState({ message: '', index: 0 });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,6 +27,7 @@ export default function SignUpForm() {
 
     if ('message' in res) {
       console.log(res.message);
+      setToast((toast) => ({ message: res.message, index: toast.index + 1 }));
     } else {
       naviagte(SIGNIN_URL);
     }
@@ -42,6 +44,7 @@ export default function SignUpForm() {
           회원가입
         </SubmitButton>
       </div>
+      {toast.message && <Toast key={`${toast}-${toast.index}`}>{toast.message}</Toast>}
     </Styled.SignUpForm>
   );
 }

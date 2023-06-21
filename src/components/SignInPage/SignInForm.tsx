@@ -6,6 +6,7 @@ import EmailInput from 'components/common/EmailInput';
 import PasswordInput from 'components/common/PasswordInput';
 import SubmitButton from 'components/common/SubmitButton';
 import { TODO_URL } from 'constants/route';
+import Toast from 'components/common/Toast';
 
 interface AuthFormEventTarget extends EventTarget {
   email: HTMLInputElement;
@@ -15,6 +16,7 @@ interface AuthFormEventTarget extends EventTarget {
 export default function SignInForm() {
   const [isValid, setIsValid] = useState({ email: false, password: false });
   const naviagte = useNavigate();
+  const [toast, setToast] = useState({ message: '', index: 0 });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,6 +27,7 @@ export default function SignInForm() {
     const res = await Api.signIn({ email, password });
     if ('message' in res) {
       console.log(res.message);
+      setToast((toast) => ({ message: res.message, index: toast.index + 1 }));
     } else {
       localStorage.setItem('access_token', res.access_token);
       naviagte(TODO_URL);
@@ -32,16 +35,19 @@ export default function SignInForm() {
   };
 
   return (
-    <Styled.SignInForm onSubmit={handleSubmit}>
-      <div>
-        <EmailInput setIsValid={setIsValid} />
-        <PasswordInput setIsValid={setIsValid} />
-      </div>
-      <div>
-        <SubmitButton disabled={!isValid.email || !isValid.password} testId='signin-button'>
-          로그인
-        </SubmitButton>
-      </div>
-    </Styled.SignInForm>
+    <>
+      <Styled.SignInForm onSubmit={handleSubmit}>
+        <div>
+          <EmailInput setIsValid={setIsValid} />
+          <PasswordInput setIsValid={setIsValid} />
+        </div>
+        <div>
+          <SubmitButton disabled={!isValid.email || !isValid.password} testId='signin-button'>
+            로그인
+          </SubmitButton>
+        </div>
+      </Styled.SignInForm>
+      {toast.message && <Toast key={`${toast}-${toast.index}`}>{toast.message}</Toast>}
+    </>
   );
 }
