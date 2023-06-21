@@ -26,7 +26,6 @@ export default function SignInForm() {
 
     const res = await Api.signIn({ email, password });
     if ('message' in res) {
-      console.log(res.message);
       setToast((toast) => ({ message: res.message, index: toast.index + 1 }));
     } else {
       localStorage.setItem('access_token', res.access_token);

@@ -6,17 +6,19 @@ import { Navigate } from 'react-router-dom';
 import { SIGNIN_URL } from 'constants/route';
 import AddTodoForm from './AddTodoForm';
 import TodoList from './TodoList';
+import Toast from 'components/common/Toast';
 
 export default function TodoPage() {
   const [todoList, setTodoList] = useState<ITodo[]>([]);
 
+  const [toast, setToast] = useState({ message: '', index: 0 });
   useEffect(() => {
     async function fetchTodo() {
       const access_token = localStorage.getItem('access_token') || '';
       const result = await Api.getTodos({ access_token });
 
       if ('message' in result) {
-        console.log(result);
+        setToast((toast) => ({ message: result.message, index: toast.index + 1 }));
       } else {
         setTodoList(result);
       }
@@ -29,9 +31,12 @@ export default function TodoPage() {
   if (!access_token) return <Navigate to={SIGNIN_URL} />;
 
   return (
-    <Styled.TodoPage>
-      <AddTodoForm setTodoList={setTodoList} />
-      <TodoList todoList={todoList} setTodoList={setTodoList} />
-    </Styled.TodoPage>
+    <>
+      <Styled.TodoPage>
+        <AddTodoForm setTodoList={setTodoList} />
+        <TodoList todoList={todoList} setTodoList={setTodoList} />
+      </Styled.TodoPage>
+      {toast.message && <Toast key={`${toast}-${toast.index}`}>{toast.message}</Toast>}
+    </>
   );
 }

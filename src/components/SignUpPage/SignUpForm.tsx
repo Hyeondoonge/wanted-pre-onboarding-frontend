@@ -26,7 +26,6 @@ export default function SignUpForm() {
     const res = await Api.signUp({ email, password });
 
     if ('message' in res) {
-      console.log(res.message);
       setToast((toast) => ({ message: res.message, index: toast.index + 1 }));
     } else {
       naviagte(SIGNIN_URL);

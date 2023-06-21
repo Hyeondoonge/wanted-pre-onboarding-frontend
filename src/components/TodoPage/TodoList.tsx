@@ -2,6 +2,7 @@ import * as Styled from './TodoPage.styled';
 import { FormEvent, useState } from 'react';
 import * as Api from 'apis/todo';
 import { ITodo } from 'interface/common';
+import Toast from 'components/common/Toast';
 
 interface TodoListProps {
   todoList: ITodo[];
@@ -33,6 +34,7 @@ function TodoItem({
 }) {
   const [isUpdatemode, setIsUpdatemode] = useState<boolean>(false);
   const { id, todo, isCompleted, userId } = item;
+  const [toast, setToast] = useState({ message: '', index: 0 });
 
   const handleCheck = async (event: FormEvent<HTMLInputElement>) => {
     if ('checked' in event.target) {
@@ -52,14 +54,14 @@ function TodoItem({
     });
   };
 
-  const updateTodo = (targetId: number, data: UpdateTodo, callback?: () => void) => {
+  const updateTodo = async (targetId: number, data: UpdateTodo, callback?: () => void) => {
     const { todo, isCompleted } = data;
 
     const access_token = localStorage.getItem('access_token') || '';
-    const result = Api.updateTodo({ access_token, id: targetId, updateTodoBody: data });
+    const result = await Api.updateTodo({ access_token, id: targetId, updateTodoBody: data });
 
     if ('message' in result) {
-      console.log(result);
+      setToast((toast) => ({ message: result.message, index: toast.index + 1 }));
     } else {
       setTodoList((todolist) => {
         const newTodolist = todolist.map((todo) => ({ ...todo }));
@@ -76,63 +78,66 @@ function TodoItem({
     }
   };
 
-  const deleteTodo = (targetId: number) => {
+  const deleteTodo = async (targetId: number) => {
     const access_token = localStorage.getItem('access_token') || '';
-    const result = Api.deleteTodo({ access_token, id: targetId });
+    const result = await Api.deleteTodo({ access_token, id: targetId });
 
-    if ('message' in result) {
-      console.log(result);
+    if (!!result && 'message' in result) {
+      setToast((toast) => ({ message: result.message, index: toast.index + 1 }));
     } else {
       setTodoList((todolist) => todolist.filter(({ id }) => id !== targetId));
     }
   };
 
   return (
-    <Styled.TodoItem>
-      <form onSubmit={handleSubmit}>
-        {!isUpdatemode ? (
-          <>
-            <label>
-              <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
-              <span>{todo}</span>
-            </label>
-            <button
-              key='modify-button'
-              data-testid='modify-button'
-              onClick={() => setIsUpdatemode(!isUpdatemode)}
-              type='button'
-            >
-              수정
-            </button>
-            <button
-              key='delete-button'
-              data-testid='delete-button'
-              onClick={() => deleteTodo(id)}
-              type='button'
-            >
-              삭제
-            </button>
-          </>
-        ) : (
-          <>
-            <label>
-              <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
-              <input data-testid='modify-input' name='todo' defaultValue={todo} />
-            </label>
-            <button key='delete-button' data-testid='submit-button'>
-              제출
-            </button>
-            <button
-              key='cancel-button'
-              data-testid='cancel-button'
-              onClick={() => setIsUpdatemode(!isUpdatemode)}
-              type='button'
-            >
-              취소
-            </button>
-          </>
-        )}
-      </form>
-    </Styled.TodoItem>
+    <>
+      <Styled.TodoItem>
+        <form onSubmit={handleSubmit}>
+          {!isUpdatemode ? (
+            <>
+              <label>
+                <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
+                <span>{todo}</span>
+              </label>
+              <button
+                key='modify-button'
+                data-testid='modify-button'
+                onClick={() => setIsUpdatemode(!isUpdatemode)}
+                type='button'
+              >
+                수정
+              </button>
+              <button
+                key='delete-button'
+                data-testid='delete-button'
+                onClick={() => deleteTodo(id)}
+                type='button'
+              >
+                삭제
+              </button>
+            </>
+          ) : (
+            <>
+              <label>
+                <input type='checkbox' checked={isCompleted} onChange={handleCheck} />
+                <input data-testid='modify-input' name='todo' defaultValue={todo} />
+              </label>
+              <button key='delete-button' data-testid='submit-button'>
+                제출
+              </button>
+              <button
+                key='cancel-button'
+                data-testid='cancel-button'
+                onClick={() => setIsUpdatemode(!isUpdatemode)}
+                type='button'
+              >
+                취소
+              </button>
+            </>
+          )}
+        </form>
+      </Styled.TodoItem>
+      {toast.message && <Toast key={`${toast}-${toast.index}`}>{toast.message}</Toast>}
+    </>
   );
 }
