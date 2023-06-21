@@ -4,11 +4,11 @@ import * as Api from 'apis/todo';
 import { ITodo } from 'interface/common';
 import { Navigate } from 'react-router-dom';
 import { SIGNIN_URL } from 'constants/route';
-import TodoItem from './TodoItem';
 import AddTodoForm from './AddTodoForm';
+import TodoList from './TodoList';
 
 export default function TodoPage() {
-  const [todolist, setTodoList] = useState<ITodo[]>([]);
+  const [todoList, setTodoList] = useState<ITodo[]>([]);
 
   useEffect(() => {
     async function fetchTodo() {
@@ -31,11 +31,7 @@ export default function TodoPage() {
   return (
     <Styled.TodoPage>
       <AddTodoForm setTodoList={setTodoList} />
-      <Styled.TodoList>
-        {todolist.map((todo) => (
-          <TodoItem key={todo.id} item={todo} setTodoList={setTodoList} />
-        ))}
-      </Styled.TodoList>
+      <TodoList todoList={todoList} setTodoList={setTodoList} />
     </Styled.TodoPage>
   );
 }

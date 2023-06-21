@@ -1,7 +1,22 @@
-import { FormEvent, useState } from 'react';
 import * as Styled from './TodoPage.styled';
+import { FormEvent, useState } from 'react';
 import * as Api from 'apis/todo';
 import { ITodo } from 'interface/common';
+
+interface TodoListProps {
+  todoList: ITodo[];
+  setTodoList: React.Dispatch<React.SetStateAction<ITodo[]>>;
+}
+
+export default function TodoList({ todoList, setTodoList }: TodoListProps) {
+  return (
+    <Styled.TodoList>
+      {todoList.map((todo) => (
+        <TodoItem key={todo.id} item={todo} setTodoList={setTodoList} />
+      ))}
+    </Styled.TodoList>
+  );
+}
 
 type UpdateTodo = Pick<ITodo, 'todo' | 'isCompleted'>;
 
@@ -9,7 +24,7 @@ interface TodoFormEventTarget extends EventTarget {
   todo: HTMLInputElement;
 }
 
-export default function TodoItem({
+function TodoItem({
   item,
   setTodoList
 }: {
