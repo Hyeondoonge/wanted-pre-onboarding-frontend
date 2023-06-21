@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
-  width: 300px;
+export const SignUpForm = styled.form`
   height: fit-content;
 
   display: flex;
+  flex-direction: column;
   gap: 10px;
 
   div {
@@ -14,4 +14,8 @@ export const Form = styled.form`
   }
 `;
 
-export const SignUpPage = styled.div``;
+export const SignUpPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;

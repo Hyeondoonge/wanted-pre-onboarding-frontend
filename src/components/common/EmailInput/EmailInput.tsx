@@ -21,6 +21,7 @@ export default function EmailInput({ setIsValid }: EmailInputProps) {
 
   return (
     <Styled.EmailInput
+      autoComplete='off'
       data-testid='email-input'
       onInput={onInput}
       name='email'
